@@ -49,6 +49,10 @@ module EaSSL
       ssl.to_pem
     end
 
+    def sha1_fingerprint
+      Digest::SHA1.hexdigest(ssl.to_der).upcase.gsub(/(..)/, '\1:').chop
+    end
+
     def self.load(pem_file_path)
       new({}).load(File.read(pem_file_path))
     end
