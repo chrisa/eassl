@@ -7,15 +7,11 @@ module EaSSL
   # License::   Distributes under the same terms as Ruby
   class SigningRequest
     def initialize(options = {})
-      if options[:csr]
-        @ssl = OpenSSL::X509::Request.new(options[:csr])
-      else
-        @options = {
-          :name       => {},                #required, CertificateName
-          :key        => nil,               #required
-        }.update(options)
-        @options[:key] ||= Key.new(@options)
-      end
+      @options = {
+        :name       => {},                #required, CertificateName
+        :key        => nil,               #required
+      }.update(options)
+      @options[:key] ||= Key.new(@options)
     end
 
     def ssl

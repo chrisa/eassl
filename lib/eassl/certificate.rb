@@ -53,6 +53,12 @@ module EaSSL
       Digest::SHA1.hexdigest(ssl.to_der).upcase.gsub(/(..)/, '\1:').chop
     end
 
+    # This method is used to intercept and pass-thru calls to openSSL methods and instance
+    # variables.
+    def method_missing(method)
+      ssl.send(method)
+    end
+
     def self.load(pem_file_path)
       new({}).load(File.read(pem_file_path))
     end

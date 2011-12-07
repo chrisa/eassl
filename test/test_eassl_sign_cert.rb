@@ -17,8 +17,9 @@ LY18Mf/fqkFIqSolbHhaV3j1MvBMseAj3GidItX/HZiwzU2dSsb36o8KthkO5IX1
 -----END CERTIFICATE REQUEST-----
 CSR
     
-    ca = EaSSL::CertificateAuthority.load(:ca_path => 'test/CA', :ca_password => '1234')
-    csr = EaSSL::SigningRequest.new(:csr => csr_text)
+    ca_path = File.join(File.dirname(__FILE__), 'CA')
+    ca = EaSSL::CertificateAuthority.load(:ca_path => ca_path, :ca_password => '1234')
+    csr = EaSSL::SigningRequest.new.load(csr_text)
     cert = EaSSL::Certificate.new(:signing_request => csr, :ca_certificate => ca.certificate)
     cert.sign(ca.key)
     
