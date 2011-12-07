@@ -7,13 +7,29 @@ module EaSSL
   # License::   Distributes under the same terms as Ruby
   class AuthorityCertificate
     def initialize(options)
-      @options = {
-        :key => nil,        #required
-        :name       => {},                #required, CertificateName
-      }.update(options)
+      if options[:ssl]
+        @ssl = options[:ssl]
+      else
+        @options = {
+          :key => nil, #required
+          :name => {}, #required, CertificateName
+        }.update(options)
+      end
     end
-    
+
+    def self.load(path, options)
+      ssl = OpenSSL::X509::Certificate.new File.read(path)
+      self.new(:ssl => ssl)
+    end
+
     def ssl
+      unless @ssl
+        @ssl = create_ssl
+      end
+      @ssl
+    end
+
+    def create_ssl
       cert = OpenSSL::X509::Certificate.new
       cert.not_before = Time.now
       cert.subject = cert.issuer = CertificateName.new({ :common_name => "CA" }.update(@options[:name])).ssl
@@ -21,7 +37,7 @@ module EaSSL
       cert.public_key = @options[:key].public_key
       cert.serial = 1
       cert.version = 2 # X509v3
-      
+
       ef = OpenSSL::X509::ExtensionFactory.new
       ef.subject_certificate = cert
       ef.issuer_certificate = cert
@@ -35,7 +51,7 @@ module EaSSL
       cert.sign(@options[:key].private_key, OpenSSL::Digest::SHA1.new)
       cert
     end
-    
+
     def method_missing(method)
       ssl.send(method)
     end

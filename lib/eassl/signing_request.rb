@@ -7,13 +7,17 @@ module EaSSL
   # License::   Distributes under the same terms as Ruby
   class SigningRequest
     def initialize(options = {})
-      @options = {
-        :name       => {},                #required, CertificateName
-        :key        => nil,               #required
-      }.update(options)
-      @options[:key] ||= Key.new(@options)
+      if options[:csr]
+        @ssl = OpenSSL::X509::Request.new(options[:csr])
+      else
+        @options = {
+          :name       => {},                #required, CertificateName
+          :key        => nil,               #required
+        }.update(options)
+        @options[:key] ||= Key.new(@options)
+      end
     end
-  
+
     def ssl
       unless @ssl
         @ssl = OpenSSL::X509::Request.new
@@ -24,21 +28,21 @@ module EaSSL
       end
       @ssl
     end
-  
+
     def key
       @options[:key]
     end
-  
+
     # This method is used to intercept and pass-thru calls to openSSL methods and instance
     # variables.
     def method_missing(method)
       ssl.send(method)
     end
-  
+
     def self.load(pem_file_path)
       new.load(File.read(pem_file_path))
     end
-  
+
     def load(pem_string)
       begin
         @ssl = OpenSSL::X509::Request.new(pem_string)

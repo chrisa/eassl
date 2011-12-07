@@ -15,9 +15,9 @@ module EaSSL
         :department   => "Web Security",
         :common_name  =>  nil,                     # required
         :email        => "eassl@rubyforge.org",
-      }.update(options.symbolize_keys)
+      }.update(options)
     end
-    
+
     def ssl
       OpenSSL::X509::Name.new([
         ['C',             @options[:country],      OpenSSL::ASN1::PRINTABLESTRING],

@@ -14,7 +14,7 @@ module EaSSL
         :comment          => "Ruby/OpenSSL/EaSSL Generated Certificate",
       }.update(options)
     end
-    
+
     def ssl
       unless @ssl
         @ssl = OpenSSL::X509::Certificate.new
@@ -25,7 +25,7 @@ module EaSSL
         @ssl.public_key = @options[:signing_request].public_key
         @ssl.serial = @options[:serial] || 2
         @ssl.version = 2 # X509v3
-      
+
         ef = OpenSSL::X509::ExtensionFactory.new
         ef.subject_certificate = @ssl
         ef.issuer_certificate = @options[:ca_certificate]? @options[:ca_certificate].ssl : @ssl
@@ -48,7 +48,7 @@ module EaSSL
     def to_pem
       ssl.to_pem
     end
-    
+
     def self.load(pem_file_path)
       new({}).load(File.read(pem_file_path))
     end
