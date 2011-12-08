@@ -42,6 +42,11 @@ module EaSSL
       ssl
     end
 
+    # Returns the length of the key in bits
+    def length
+      ssl.n.num_bytes * 8
+    end
+
     # Export the encrypted key, returns a string
     def to_pem
       ssl.export(OpenSSL::Cipher::DES.new('EDE3-CBC'), @options[:password])

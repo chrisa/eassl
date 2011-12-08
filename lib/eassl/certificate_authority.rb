@@ -19,7 +19,7 @@ module EaSSL
 
     def self.load(options)
       key = Key.load(File.join(options[:ca_path], 'cakey.pem'), options[:ca_password])
-      certificate = AuthorityCertificate.load(File.join(options[:ca_path], 'cacert.pem'), :key => key)
+      certificate = AuthorityCertificate.load(File.join(options[:ca_path], 'cacert.pem'))
       self.new(:key => key, :certificate => certificate)
     end
 

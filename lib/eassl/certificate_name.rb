@@ -30,6 +30,10 @@ module EaSSL
       ])
     end
 
+    def name
+      ssl
+    end
+
     def options
       @options
     end

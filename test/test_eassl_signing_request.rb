@@ -8,7 +8,7 @@ class TestEasslSigningRequest < Test::Unit::TestCase
     assert csr
     assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=foo.bar.com/emailAddress=eassl@rubyforge.org", csr.subject.to_s
     assert csr.key
-    assert_equal 2048, csr.key.n.num_bytes * 8
+    assert_equal 2048, csr.key.length
   end
 
   def test_new_csr_specify_key
@@ -44,6 +44,19 @@ CSR
     csr = EaSSL::SigningRequest.new.load(csr_text)
     assert csr
     assert_equal '/C=AU/ST=Some-State/O=Internet Widgits Pty Ltd', csr.subject.to_s
+  end
+
+  def test_load_nonexistent_file
+    assert_raises Errno::ENOENT do
+      key = EaSSL::SigningRequest.load('./foo')
+    end
+  end
+
+  def test_load_bad_file
+    file = File.join(File.dirname(__FILE__), '..', 'Rakefile')
+    assert_raises RuntimeError do
+      key = EaSSL::SigningRequest.load(file)
+    end
   end
 
 end

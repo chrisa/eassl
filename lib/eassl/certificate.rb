@@ -42,13 +42,14 @@ module EaSSL
     end
 
     def sign(ca_key)
-      ssl.sign(ca_key.ssl, OpenSSL::Digest::SHA1.new)
+      ssl.sign(ca_key.private_key, OpenSSL::Digest::SHA1.new)
     end
 
     def to_pem
       ssl.to_pem
     end
 
+    # Returns a SHA1 fingerprint of the certificate in the OpenSSL style
     def sha1_fingerprint
       Digest::SHA1.hexdigest(ssl.to_der).upcase.gsub(/(..)/, '\1:').chop
     end

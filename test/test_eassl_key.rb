@@ -16,7 +16,7 @@ class TestEasslKey < Test::Unit::TestCase
 
   def test_new_key_defaults_bit_length
     key = EaSSL::Key.new
-    assert_equal 2048, key.n.num_bytes * 8
+    assert_equal 2048, key.length
   end
 
   def test_new_key_defaults_password
@@ -28,7 +28,7 @@ class TestEasslKey < Test::Unit::TestCase
 
   def test_override_bit_length
     key = EaSSL::Key.new(:bits => 1024)
-    assert_equal 1024, key.n.num_bytes * 8
+    assert_equal 1024, key.length
   end
 
   def test_override_password
@@ -60,14 +60,14 @@ YvdYo7ml27+Zrr0rmnhF/XVtDwkQd/K0I3sXIr92fHk=
 KEY
     key = EaSSL::Key.new.load(key_text, 'ssl_password')
     assert key
-    assert_equal 256, key.n.num_bytes * 8
+    assert_equal 256, key.length
   end
 
   def test_load_encrypted_key_file
     file = File.join(File.dirname(__FILE__), 'encrypted_key.pem')
     key = EaSSL::Key.load(file, 'ssl_password')
     assert key
-    assert_equal 256, key.n.num_bytes * 8
+    assert_equal 256, key.length
   end
 
   def test_load_unencrypted_key_text
@@ -81,14 +81,14 @@ Bt6Y7QIRAM7AD/gt+xiWUH8z+ra7js8CEQCXelqkofFloc1P+GnkjbLVAhAriPXT
 KEY
     key = EaSSL::Key.new.load(key_text)
     assert key
-    assert_equal 256, key.n.num_bytes * 8
+    assert_equal 256, key.length
   end
 
   def test_load_unencrypted_key_file
     file = File.join(File.dirname(__FILE__), 'unencrypted_key.pem')
     key = EaSSL::Key.load(file)
     assert key
-    assert_equal 256, key.n.num_bytes * 8
+    assert_equal 256, key.length
   end
 
   def test_load_nonexistent_file

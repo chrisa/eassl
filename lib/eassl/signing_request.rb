@@ -18,7 +18,7 @@ module EaSSL
       unless @ssl
         @ssl = OpenSSL::X509::Request.new
         @ssl.version = 0
-        @ssl.subject = CertificateName.new(@options[:name].options).ssl
+        @ssl.subject = CertificateName.new(@options[:name].options).name
         @ssl.public_key = key.public_key
         @ssl.sign(key.private_key, OpenSSL::Digest::SHA1.new)
       end
