@@ -29,6 +29,10 @@ module EaSSL
       @options[:key]
     end
 
+    def to_pem
+      ssl.to_pem
+    end
+
     # This method is used to intercept and pass-thru calls to openSSL methods and instance
     # variables.
     def method_missing(method)
