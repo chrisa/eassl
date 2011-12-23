@@ -12,22 +12,22 @@ $:.unshift File.expand_path(File.dirname(__FILE__))
 #
 # For a full list of features and instructions, see the #README.
 #
-# EaSSL is a module containing all of the great EaSSL classes for creating 
+# EaSSL is a module containing all of the great EaSSL classes for creating
 # and managing openSSL keys, signing request, and certificates.
-# 
+#
 # * EaSSL::Key: the class for loading and creating SSL keys
 # * EaSSL::SigningRequest: the class for creating SSL signing requests
 
 module EaSSL
   VERSION = '0.1'
-  
+
   def self.generate_self_signed(options)
     ca = CertificateAuthority.new({:bits => 1024}.update(options[:ca_options]||{}))
     sr = SigningRequest.new(options)
     cert = ca.create_certificate(sr)
     [ca, sr, cert]
   end
-  
+
   def self.config_webrick(webrick_config, options = {})
     hostname = `hostname`.strip
     eassl_host_dir = "#{File.expand_path('~')}/.eassl/#{hostname}"
@@ -36,7 +36,7 @@ module EaSSL
     server_key_file = "#{eassl_host_dir}/server.key"
     server_cert_file = "#{eassl_host_dir}/server.crt"
     FileUtils.rm_rf(eassl_host_dir) if options[:force_regeneration]
-    
+
     if File.exist?(server_cert_file)
       key = Key.load(server_key_file, 'countinghouse1234')
       cert = Certificate.load(server_cert_file)
@@ -50,7 +50,7 @@ module EaSSL
       File.open(server_key_file, "w", 0777) {|f| f << key.to_pem }
       File.open(server_cert_file, "w", 0777) {|f| f << cert.to_pem }
     end
-    
+
     webrick_config.update({
       :SSLEnable       => true,
       :SSLPrivateKey => key.ssl,
@@ -68,3 +68,4 @@ require 'eassl/signing_request'
 require 'eassl/certificate'
 require 'eassl/authority_certificate'
 require 'eassl/certificate_authority'
+require 'eassl/serial'

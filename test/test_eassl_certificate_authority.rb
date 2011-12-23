@@ -46,4 +46,22 @@ class TestEasslCertificateAuthority < Test::Unit::TestCase
     assert_equal "/C=US/O=Venda/OU=auto-CA/CN=CA", cert.issuer.to_s
   end
 
+  def test_loaded_ca_sign_certs_with_serial
+    ca_path = File.join(File.dirname(__FILE__), 'CA')
+    ca = EaSSL::CertificateAuthority.load(:ca_path => ca_path, :ca_password => '1234')
+
+    next_serial = ca.serial.next
+
+    key = EaSSL::Key.new
+    name = EaSSL::CertificateName.new(:common_name => 'foo.bar.com')
+    csr = EaSSL::SigningRequest.new(:name => name, :key => key)
+    cert = ca.create_certificate(csr)
+    assert cert
+    assert cert.serial.to_i == next_serial
+    assert ca.serial.next == next_serial + 1
+
+    ca = EaSSL::CertificateAuthority.load(:ca_path => ca_path, :ca_password => '1234')
+    assert ca.serial.next == next_serial + 1
+  end
+
 end
