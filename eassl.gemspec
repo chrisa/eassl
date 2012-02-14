@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{eassl}
-  s.version = "0.1.3"
+  s.version = "0.1.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = [%q{Paul Nicholson}, %q{Paul Meserve}]
-  s.date = %q{2011-12-23}
+  s.authors = ["Paul Nicholson", "Paul Meserve"]
+  s.date = %q{2012-02-14}
   s.description = %q{EaSSL is a library aimed at making openSSL certificate generation and management easier and more ruby-ish.}
   s.email = %q{dev@pogodan.com}
   s.extra_rdoc_files = [
@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
     "lib/eassl/certificate_authority.rb",
     "lib/eassl/certificate_name.rb",
     "lib/eassl/key.rb",
+    "lib/eassl/serial.rb",
     "lib/eassl/signing_request.rb",
     "test/CA/cacert.pem",
     "test/CA/cakey.pem",
@@ -52,9 +53,9 @@ Gem::Specification.new do |s|
     "test/unencrypted_key2.pem"
   ]
   s.homepage = %q{http://github.com/themgt/eassl}
-  s.licenses = [%q{Ruby}]
-  s.require_paths = [%q{lib}]
-  s.rubygems_version = %q{1.8.6}
+  s.licenses = ["Ruby"]
+  s.require_paths = ["lib"]
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{EaSSL is a library aimed at making openSSL certificate generation and management easier and more ruby-ish.}
   s.test_files = [
     "test/helper.rb",
@@ -69,9 +70,10 @@ Gem::Specification.new do |s|
   ]
 
   if s.respond_to? :specification_version then
+    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
