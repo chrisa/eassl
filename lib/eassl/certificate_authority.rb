@@ -26,8 +26,8 @@ module EaSSL
       self.new(:key => key, :certificate => certificate, :serial => serial)
     end
 
-    def create_certificate(signing_request)
-      cert = Certificate.new(:signing_request => signing_request, :ca_certificate => @certificate, :serial => @serial.issue_serial)
+    def create_certificate(signing_request, type='server')
+      cert = Certificate.new(:signing_request => signing_request, :ca_certificate => @certificate, :serial => @serial.issue_serial, :type => type)
       @serial.save!
       cert.sign(@key)
       cert

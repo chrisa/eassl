@@ -35,6 +35,8 @@ class TestEasslCertificate < Test::Unit::TestCase
     assert cert.to_pem =~ /BEGIN CERTIFICATE/
     assert_equal cert.subject.to_s, csr.subject.to_s
     assert_equal cert.issuer.to_s, ca.certificate.subject.to_s
+    ext_key_usage = cert.extensions.select {|e| e.oid == 'extendedKeyUsage' }
+    assert_equal "TLS Web Server Authentication", ext_key_usage[0].value
   end
 
   def test_new_client_certificate_ca_signed
