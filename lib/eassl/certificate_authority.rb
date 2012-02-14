@@ -13,8 +13,9 @@ module EaSSL
         @certificate = options[:certificate]
         @serial = options[:serial]
       else
+        options[:name] ||= {}
         @key = Key.new({:password => 'ca_ssl_password'}.update(options))
-        @certificate = AuthorityCertificate.new(:key => @key)
+        @certificate = AuthorityCertificate.new(:key => @key, :name => options[:name])
         @serial = Serial.new(:next => 1)
       end
     end
