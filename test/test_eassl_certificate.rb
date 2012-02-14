@@ -23,7 +23,7 @@ class TestEasslCertificate < Test::Unit::TestCase
     assert cert.to_pem =~ /BEGIN CERTIFICATE/
   end
 
-  def test_new_certificate_ca_signed
+  def test_new_server_certificate_ca_signed
     ca_path = File.join(File.dirname(__FILE__), 'CA')
     ca = EaSSL::CertificateAuthority.load(:ca_path => ca_path, :ca_password => '1234')
     key = EaSSL::Key.new
@@ -35,6 +35,22 @@ class TestEasslCertificate < Test::Unit::TestCase
     assert cert.to_pem =~ /BEGIN CERTIFICATE/
     assert_equal cert.subject.to_s, csr.subject.to_s
     assert_equal cert.issuer.to_s, ca.certificate.subject.to_s
+  end
+
+  def test_new_client_certificate_ca_signed
+    ca_path = File.join(File.dirname(__FILE__), 'CA')
+    ca = EaSSL::CertificateAuthority.load(:ca_path => ca_path, :ca_password => '1234')
+    key = EaSSL::Key.new
+    name = EaSSL::CertificateName.new(:common_name => 'foo.bar.com')
+    csr = EaSSL::SigningRequest.new(:name => name, :key => key)
+
+    cert = EaSSL::Certificate.new(:type => 'client', :signing_request => csr, :ca_certificate => ca.certificate)
+    cert.sign(ca.key)
+    assert cert.to_pem =~ /BEGIN CERTIFICATE/
+    assert_equal cert.subject.to_s, csr.subject.to_s
+    assert_equal cert.issuer.to_s, ca.certificate.subject.to_s
+    ext_key_usage = cert.extensions.select {|e| e.oid == 'extendedKeyUsage' }
+    assert_equal "TLS Web Client Authentication, E-mail Protection", ext_key_usage[0].value
   end
 
   def test_load_certificate_file

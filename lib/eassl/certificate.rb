@@ -12,6 +12,7 @@ module EaSSL
         :signing_request  => nil,               #required
         :ca_certificate   => nil,               #required
         :comment          => "Ruby/OpenSSL/EaSSL Generated Certificate",
+        :type             => "server"
       }.update(options)
     end
 
@@ -31,12 +32,22 @@ module EaSSL
         ef.issuer_certificate = @options[:ca_certificate]? @options[:ca_certificate].ssl : @ssl
         @ssl.extensions = [
           ef.create_extension("basicConstraints","CA:FALSE"),
-          ef.create_extension("keyUsage", "digitalSignature, keyEncipherment"),
           ef.create_extension("subjectKeyIdentifier", "hash"),
-          ef.create_extension("extendedKeyUsage", "serverAuth"),
+
           ef.create_extension("nsComment", @options[:comment]),
         ]
+        # this extension must be added separately, after the others.
+        # presumably needs subjectKeyIdentifier to already be in place
         @ssl.add_extension(ef.create_extension("authorityKeyIdentifier", "keyid:always,issuer:always"))
+
+        if @options[:type] == 'server'
+          @ssl.add_extension(ef.create_extension("keyUsage", "digitalSignature,keyEncipherment"))
+          @ssl.add_extension(ef.create_extension("extendedKeyUsage", "serverAuth"))
+        end
+        if @options[:type] == 'client'
+          @ssl.add_extension(ef.create_extension("keyUsage", "nonRepudiation,digitalSignature,keyEncipherment"))
+          @ssl.add_extension(ef.create_extension("extendedKeyUsage", "clientAuth,emailProtection"))
+        end
       end
       @ssl
     end
