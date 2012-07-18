@@ -27,8 +27,17 @@ module EaSSL
       self.new(:key => key, :certificate => certificate, :serial => serial)
     end
 
-    def create_certificate(signing_request, type='server')
-      cert = Certificate.new(:signing_request => signing_request, :ca_certificate => @certificate, :serial => @serial.issue_serial, :type => type)
+    def create_certificate(signing_request, type='server', days_valid=nil)
+      options = {
+        :signing_request => signing_request,
+        :ca_certificate => @certificate,
+        :serial => @serial.issue_serial,
+        :type => type
+      }
+      if days_valid
+        options[:days_valid] = days_valid
+      end
+      cert = Certificate.new(options)
       @serial.save!
       cert.sign(@key)
       cert

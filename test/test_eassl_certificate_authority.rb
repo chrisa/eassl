@@ -78,6 +78,21 @@ class TestEasslCertificateAuthority < Test::Unit::TestCase
     assert_equal "TLS Web Client Authentication, E-mail Protection", ext_key_usage[0].value
   end
 
+  def test_new_ca_sign_client_cert_with_expiry
+    ca = EaSSL::CertificateAuthority.new
+    key = EaSSL::Key.new
+    name = EaSSL::CertificateName.new(:common_name => 'foo.bar.com')
+    csr = EaSSL::SigningRequest.new(:name => name, :key => key)
+    t = Time.now
+    cert = ca.create_certificate(csr, 'client', 10)
+    assert cert
+    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=foo.bar.com/emailAddress=eassl@rubyforge.org", cert.subject.to_s
+    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=CA/emailAddress=eassl@rubyforge.org", cert.issuer.to_s
+    ext_key_usage = cert.extensions.select {|e| e.oid == 'extendedKeyUsage' }
+    assert_equal "TLS Web Client Authentication, E-mail Protection", ext_key_usage[0].value
+    assert_equal (t + (24 * 60 * 60 * 10)).to_i, cert.ssl.not_after.to_i
+  end
+
   def test_loaded_ca_sign_cert
     ca_path = File.join(File.dirname(__FILE__), 'CA')
     ca = EaSSL::CertificateAuthority.load(:ca_path => ca_path, :ca_password => '1234')
