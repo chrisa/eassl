@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{eassl}
-  s.version = "0.1.7"
+  s.name = %q{eassl2}
+  s.version = "2.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Paul Nicholson}, %q{Paul Meserve}, %q{Chris Andrews}]
-  s.date = %q{2012-07-18}
-  s.description = %q{EaSSL is a library aimed at making openSSL certificate generation and management easier and more ruby-ish.}
-  s.email = %q{dev@pogodan.com}
+  s.date = %q{2012-07-20}
+  s.description = %q{This gem is a drop-in replacement for eassl 0.1.1643}
+  s.email = %q{chris@nodnol.org}
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.txt"
@@ -52,7 +52,7 @@ Gem::Specification.new do |s|
     "test/unencrypted_key.pem",
     "test/unencrypted_key2.pem"
   ]
-  s.homepage = %q{http://github.com/themgt/eassl}
+  s.homepage = %q{http://github.com/chrisa/eassl}
   s.licenses = [%q{Ruby}]
   s.require_paths = [%q{lib}]
   s.rubygems_version = %q{1.8.6}

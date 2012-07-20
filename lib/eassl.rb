@@ -19,7 +19,7 @@ $:.unshift File.expand_path(File.dirname(__FILE__))
 # * EaSSL::SigningRequest: the class for creating SSL signing requests
 
 module EaSSL
-  VERSION = '0.1'
+  VERSION = '2.0.0'
 
   def self.generate_self_signed(options)
     ca = CertificateAuthority.new({:bits => 1024}.update(options[:ca_options]||{}))

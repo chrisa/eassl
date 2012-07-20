@@ -12,12 +12,12 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "eassl"
-  gem.homepage = "http://github.com/themgt/eassl"
+  gem.name = "eassl2"
+  gem.homepage = "http://github.com/chrisa/eassl"
   gem.license = "Ruby"
   gem.summary = %Q{EaSSL is a library aimed at making openSSL certificate generation and management easier and more ruby-ish.}
-  gem.description = %Q{EaSSL is a library aimed at making openSSL certificate generation and management easier and more ruby-ish.}
-  gem.email = "dev@pogodan.com"
+  gem.description = %Q{This gem is a more featureful but still drop-in replacement for eassl 0.1.1643}
+  gem.email = "chris@nodnol.org"
   gem.authors = ["Paul Nicholson", "Paul Meserve", "Chris Andrews"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
