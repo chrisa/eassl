@@ -8,15 +8,15 @@ class TestEassl < Test::Unit::TestCase
 
     assert ca
     assert_equal EaSSL::CertificateAuthority, ca.class
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=CA/emailAddress=eassl@rubyforge.org", ca.certificate.subject.to_s
+    assert_equal "/CN=CA", ca.certificate.subject.to_s
 
     assert sr
     assert_equal EaSSL::SigningRequest, sr.class
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=foo.bar.com/emailAddress=eassl@rubyforge.org", sr.subject.to_s
+    assert_equal "/CN=foo.bar.com", sr.subject.to_s
 
     assert cert
     assert_equal EaSSL::Certificate, cert.class
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=foo.bar.com/emailAddress=eassl@rubyforge.org", cert.subject.to_s
+    assert_equal "/CN=foo.bar.com", cert.subject.to_s
 
     key = sr.key
     assert key

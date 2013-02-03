@@ -7,27 +7,26 @@ module EaSSL
   # License::   Distributes under the same terms as Ruby
   class CertificateName
     def initialize(options)
-      @options = {
-        :country      => "US",
-        :state        => "North Carolina",
-        :city         => "Fuquay Varina",
-        :organization => "WebPower Design",
-        :department   => "Web Security",
-        :common_name  =>  nil,                     # required
-        :email        => "eassl@rubyforge.org",
-      }.update(options)
+      @options = options
     end
 
     def ssl
-      OpenSSL::X509::Name.new([
-        ['C',             @options[:country],      OpenSSL::ASN1::PRINTABLESTRING],
-        ['ST',            @options[:state],        OpenSSL::ASN1::PRINTABLESTRING],
-        ['L',             @options[:city],         OpenSSL::ASN1::PRINTABLESTRING],
-        ['O',             @options[:organization], OpenSSL::ASN1::UTF8STRING],
-        ['OU',            @options[:department],   OpenSSL::ASN1::UTF8STRING],
-        ['CN',            @options[:common_name],  OpenSSL::ASN1::UTF8STRING],
-        ['emailAddress',  @options[:email],        OpenSSL::ASN1::UTF8STRING]
-      ])
+      name_mapping = [
+        ['C', :country],
+        ['ST', :state],
+        ['L', :city],
+        ['O', :organization],
+        ['OU', :department],
+        ['CN', :common_name],
+        ['emailAddress', :email]
+      ]
+
+      name = []
+      name_mapping.each do |k|
+        name << [k[0], @options[k[1]], OpenSSL::ASN1::PRINTABLESTRING] if @options[k[1]]
+      end
+
+      OpenSSL::X509::Name.new(name)
     end
 
     def name

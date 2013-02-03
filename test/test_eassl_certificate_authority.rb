@@ -9,7 +9,7 @@ class TestEasslCertificateAuthority < Test::Unit::TestCase
     assert ca.certificate
 
     assert_equal 2048, ca.key.length
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=CA/emailAddress=eassl@rubyforge.org", ca.certificate.subject.to_s
+    assert_equal "/CN=CA", ca.certificate.subject.to_s
   end
 
   def test_load_ca
@@ -59,8 +59,8 @@ class TestEasslCertificateAuthority < Test::Unit::TestCase
     csr = EaSSL::SigningRequest.new(:name => name, :key => key)
     cert = ca.create_certificate(csr)
     assert cert
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=foo.bar.com/emailAddress=eassl@rubyforge.org", cert.subject.to_s
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=CA/emailAddress=eassl@rubyforge.org", cert.issuer.to_s
+    assert_equal "/CN=foo.bar.com", cert.subject.to_s
+    assert_equal "/CN=CA", cert.issuer.to_s
     ext_key_usage = cert.extensions.select {|e| e.oid == 'extendedKeyUsage' }
     assert_equal "TLS Web Server Authentication", ext_key_usage[0].value
   end
@@ -72,8 +72,8 @@ class TestEasslCertificateAuthority < Test::Unit::TestCase
     csr = EaSSL::SigningRequest.new(:name => name, :key => key)
     cert = ca.create_certificate(csr, 'client')
     assert cert
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=foo.bar.com/emailAddress=eassl@rubyforge.org", cert.subject.to_s
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=CA/emailAddress=eassl@rubyforge.org", cert.issuer.to_s
+    assert_equal "/CN=foo.bar.com", cert.subject.to_s
+    assert_equal "/CN=CA", cert.issuer.to_s
     ext_key_usage = cert.extensions.select {|e| e.oid == 'extendedKeyUsage' }
     assert_equal "TLS Web Client Authentication, E-mail Protection", ext_key_usage[0].value
   end
@@ -86,8 +86,8 @@ class TestEasslCertificateAuthority < Test::Unit::TestCase
     t = Time.now
     cert = ca.create_certificate(csr, 'client', 10)
     assert cert
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=foo.bar.com/emailAddress=eassl@rubyforge.org", cert.subject.to_s
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=CA/emailAddress=eassl@rubyforge.org", cert.issuer.to_s
+    assert_equal "/CN=foo.bar.com", cert.subject.to_s
+    assert_equal "/CN=CA", cert.issuer.to_s
     ext_key_usage = cert.extensions.select {|e| e.oid == 'extendedKeyUsage' }
     assert_equal "TLS Web Client Authentication, E-mail Protection", ext_key_usage[0].value
     assert_equal (t + (24 * 60 * 60 * 10)).to_i, cert.ssl.not_after.to_i
@@ -101,7 +101,7 @@ class TestEasslCertificateAuthority < Test::Unit::TestCase
     csr = EaSSL::SigningRequest.new(:name => name, :key => key)
     cert = ca.create_certificate(csr)
     assert cert
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=foo.bar.com/emailAddress=eassl@rubyforge.org", cert.subject.to_s
+    assert_equal "/CN=foo.bar.com", cert.subject.to_s
     assert_equal "/C=US/O=Venda/OU=auto-CA/CN=CA", cert.issuer.to_s
   end
 

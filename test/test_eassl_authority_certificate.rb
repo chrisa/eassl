@@ -6,8 +6,8 @@ class TestEasslCertificateAuthority < Test::Unit::TestCase
     key = EaSSL::Key.new
     cacert = EaSSL::AuthorityCertificate.new(:key => key)
     assert cacert
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=CA/emailAddress=eassl@rubyforge.org", cacert.subject.to_s
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=CA/emailAddress=eassl@rubyforge.org", cacert.issuer.to_s
+    assert_equal "/CN=CA", cacert.subject.to_s
+    assert_equal "/CN=CA", cacert.issuer.to_s
   end
 
   def test_load_certificate

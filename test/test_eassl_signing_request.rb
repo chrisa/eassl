@@ -6,7 +6,7 @@ class TestEasslSigningRequest < Test::Unit::TestCase
     name = EaSSL::CertificateName.new(:common_name => 'foo.bar.com')
     csr = EaSSL::SigningRequest.new(:name => name)
     assert csr
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=foo.bar.com/emailAddress=eassl@rubyforge.org", csr.subject.to_s
+    assert_equal "/CN=foo.bar.com", csr.subject.to_s
     assert csr.key
     assert_equal 2048, csr.key.length
   end
@@ -17,7 +17,7 @@ class TestEasslSigningRequest < Test::Unit::TestCase
     name = EaSSL::CertificateName.new(:common_name => 'foo.bar.com')
     csr = EaSSL::SigningRequest.new(:name => name, :key => key)
     assert csr
-    assert_equal "/C=US/ST=North Carolina/L=Fuquay Varina/O=WebPower Design/OU=Web Security/CN=foo.bar.com/emailAddress=eassl@rubyforge.org", csr.subject.to_s
+    assert_equal "/CN=foo.bar.com", csr.subject.to_s
   end
 
   def test_load_csr_file
