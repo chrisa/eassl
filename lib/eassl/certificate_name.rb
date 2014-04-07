@@ -12,18 +12,18 @@ module EaSSL
 
     def ssl
       name_mapping = [
-        ['C', :country],
-        ['ST', :state],
-        ['L', :city],
-        ['O', :organization],
-        ['OU', :department],
-        ['CN', :common_name],
-        ['emailAddress', :email]
+        ['C', :country, OpenSSL::ASN1::PRINTABLESTRING],
+        ['ST', :state, OpenSSL::ASN1::PRINTABLESTRING],
+        ['L', :city, OpenSSL::ASN1::PRINTABLESTRING],
+        ['O', :organization, OpenSSL::ASN1::UTF8STRING],
+        ['OU', :department, OpenSSL::ASN1::UTF8STRING],
+        ['CN', :common_name, OpenSSL::ASN1::UTF8STRING],
+        ['emailAddress', :email, OpenSSL::ASN1::IA5STRING]
       ]
 
       name = []
       name_mapping.each do |k|
-        name << [k[0], @options[k[1]], OpenSSL::ASN1::PRINTABLESTRING] if @options[k[1]]
+        name << [k[0], @options[k[1]], k[2]] if @options[k[1]]
       end
 
       OpenSSL::X509::Name.new(name)
