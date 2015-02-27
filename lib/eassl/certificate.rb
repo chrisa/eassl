@@ -52,8 +52,8 @@ module EaSSL
       @ssl
     end
 
-    def sign(ca_key)
-      ssl.sign(ca_key.private_key, OpenSSL::Digest::SHA1.new)
+    def sign(ca_key, digest=OpenSSL::Digest::SHA1.new)
+      ssl.sign(ca_key.private_key, digest)
     end
 
     def to_pem
