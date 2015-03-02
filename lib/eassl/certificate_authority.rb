@@ -27,7 +27,7 @@ module EaSSL
       self.new(:key => key, :certificate => certificate, :serial => serial)
     end
 
-    def create_certificate(signing_request, type='server', days_valid=nil)
+    def create_certificate(signing_request, type='server', days_valid=nil, digest=OpenSSL::Digest::SHA1.new)
       options = {
         :signing_request => signing_request,
         :ca_certificate => @certificate,
@@ -39,7 +39,7 @@ module EaSSL
       end
       cert = Certificate.new(options)
       @serial.save!
-      cert.sign(@key)
+      cert.sign(@key, digest)
       cert
     end
   end

@@ -10,6 +10,7 @@ module EaSSL
       @options = {
         :name       => {},                #required, CertificateName
         :key        => nil,               #required
+        :digest     => OpenSSL::Digest::SHA1.new,
       }.update(options)
       @options[:key] ||= Key.new(@options)
     end
@@ -20,7 +21,7 @@ module EaSSL
         @ssl.version = 0
         @ssl.subject = CertificateName.new(@options[:name].options).name
         @ssl.public_key = key.public_key
-        @ssl.sign(key.private_key, OpenSSL::Digest::SHA1.new)
+        @ssl.sign(key.private_key, @options[:digest])
       end
       @ssl
     end
